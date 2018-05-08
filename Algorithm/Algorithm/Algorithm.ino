@@ -1,6 +1,8 @@
 int led = 2;
 int ldr = A0;
 int ldrStat;
+int OldValue;
+int NewValue;
 
 bool LightOn = true;
 
@@ -13,15 +15,12 @@ int SetLight(){
 }
 
 int CheckLight() {
-  if(ldrStat < 50){
+  if(NewValue < (OldValue - 20) || NewValue > (OldValue + 20)){
     LightOn = true;
-  } else{
-    LightOn = false;
+  } else {
+    
   }
 }
-
-int OldValue;
-int NewValue;
 
 void setup() {
   Serial.begin(9600);
@@ -29,7 +28,6 @@ void setup() {
   pinMode(ldr, INPUT);
   pinMode(led, OUTPUT);
 
-  digitalWrite(led, HIGH);
 
   delay(500);
 }
@@ -37,11 +35,12 @@ void setup() {
 void loop() {
 
   ldrStat = analogRead(ldr);
-  OldValue = analogRead(ldr);
-
+  NewValue = analogRead(ldr);
   CheckLight();
   SetLight();
-
+  
+  delay(500);
   Serial.println(ldrStat);
+  OldValue = analogRead(ldr);
   delay(500);
 }
