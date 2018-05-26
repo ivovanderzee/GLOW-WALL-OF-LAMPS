@@ -11,11 +11,17 @@
 #define LED_SIZE 35
 #define LDR_SIZE 35
 
-int LED[LED_SIZE] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34};
-int LDR[LDR_SIZE] = {}; // We still have to discuss where to connect these...
+int LED[LED_SIZE];
+int LDR[LDR_SIZE]; // We still have to discuss where to connect these...
 
+int PopulateArray() {
+  for (int i = 0; i <= ARRAYLENGHT; i++) {
+    TheArray[i] = i;
+  }
+}
 
 Allocate() {
+  PopulateArray();
   // Define LED and LDR input/output
   int LED_COUNT = 0;
   int LDR_COUNT = 0;
@@ -33,11 +39,20 @@ Allocate() {
 
 Light_On() {
   // Lights On (Default)
-  
+  int POWER_COUNT = 0;
+    while (POWER_COUNT <= LED_SIZE){
+      digitalWrite(LED[POWER_COUNT], HIGH);
+      POWER_COUNT++;
+    }
   }
   
 Light_Off() {
   // Lights Off (Default)
+  int POWER_COUNT = 0;
+    while (POWER_COUNT <= LED_SIZE){
+      digitalWrite(LED[POWER_COUNT], LOW);
+      POWER_COUNT++;
+    }
 }
 
 Start(){
