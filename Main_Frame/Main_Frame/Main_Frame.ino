@@ -6,21 +6,26 @@
    \ \_______\ \__\ \_______\ \__\    \ \__\       \ \__\ \__\\ \__\ \_______\\__\                          \ \_______\ \_______\ \_______\ \____________\
     \|_______|\|__|\|_______|\|__|     \|__|        \|__|\|__| \|__|\|_______\|__|                           \|_______|\|_______|\|_______|\|____________|                                                                                                                                                      
 */                                                                                                                                                 
+
+
                                                                                                                                                           
 // Allocate memory for the LED's and Sensors
 #define LED_SIZE 35
 #define LDR_SIZE 35
 
 int LED[LED_SIZE];
+int LEDSTATUS[LED_SIZE];
 int LDR[LDR_SIZE]; // We still have to discuss where to connect these...
+int LDR_VALUES[LDR_SIZE];
 
 int PopulateArray() {
-  for (int i = 0; i <= ARRAYLENGHT; i++) {
-    TheArray[i] = i;
+  for (int i = 0; i <= LED_SIZE; i++) {
+    LED[i] = i;
   }
+  Serial.println("ARRAY POPULATED");
 }
 
-Allocate() {
+void Allocate() {
   PopulateArray();
   // Define LED and LDR input/output
   int LED_COUNT = 0;
@@ -31,39 +36,64 @@ Allocate() {
     LED_COUNT++;
   }
 
+
   while (LDR_COUNT <= LDR_SIZE){
     pinMode(LDR[LDR_COUNT], INPUT);
     LDR_COUNT++;
   }
+  Serial.println("INPUT/OUTPUT SET");
 }
 
-Light_On() {
+void Light_On() {
   // Lights On (Default)
   int POWER_COUNT = 0;
     while (POWER_COUNT <= LED_SIZE){
       digitalWrite(LED[POWER_COUNT], HIGH);
       POWER_COUNT++;
     }
+    Serial.println("LIGHTS ON");
   }
   
-Light_Off() {
+void Light_Off() {
   // Lights Off (Default)
   int POWER_COUNT = 0;
     while (POWER_COUNT <= LED_SIZE){
       digitalWrite(LED[POWER_COUNT], LOW);
       POWER_COUNT++;
     }
+    Serial.println("LIGHTS OFF");
 }
 
-Start(){
+void Start(){
   // Retrieve initial LDR values
+  Serial.println("INITIAL VALUES FETCHED");
 }
 
 
+
+
+// Fix these methods later on...
+
+SendArray(){
+  Wire.beginTransmission(8); // transmit to device #8
+  Wire.write(a);              // sends one byte
+  Wire.endTransmission();    // stop transmitting
+}
+
+ReceiveArray(){
+  
+}
+
+
+
+
+// Setup and Main Loop
 
 void setup() {
+  Serial.begin(9600);
   Allocate();
   Light_On();
+  // Light_Off();
   Start();
 }
 
