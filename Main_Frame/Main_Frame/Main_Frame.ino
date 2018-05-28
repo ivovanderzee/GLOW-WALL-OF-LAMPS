@@ -10,8 +10,8 @@
 
                                                                                                                                                           
 // Allocate memory for the LED's and Sensors
-#define LED_SIZE 35
-#define LDR_SIZE 35
+#define LED_SIZE 5
+#define LDR_SIZE 5
 
 int LED[LED_SIZE];
 int LEDSTATUS[LED_SIZE];
@@ -36,12 +36,17 @@ void Allocate() {
     LED_COUNT++;
   }
 
-
+/*
   while (LDR_COUNT <= LDR_SIZE){
     pinMode(LDR[LDR_COUNT], INPUT);
     LDR_COUNT++;
+
   }
+
+*/
+
   Serial.println("INPUT/OUTPUT SET");
+ 
 }
 
 void Light_On() {
@@ -74,16 +79,14 @@ void Start(){
 
 // Fix these methods later on...
 
-SendArray(){
-  Wire.beginTransmission(8); // transmit to device #8
-  Wire.write(a);              // sends one byte
-  Wire.endTransmission();    // stop transmitting
-}
 
+/*
 ReceiveArray(){
+
+
   
 }
-
+*/
 
 
 
@@ -98,10 +101,12 @@ void setup() {
 }
 
 void loop() {
+  /*
   New_Value();
   Receive_Array();
   Switch_Light();
   Algo();
   Old_Value();
   Send_Array();
+  */
 }
