@@ -10,17 +10,19 @@
 
                                                                                                                                                           
 // Allocate memory for the LED's and Sensors
-#define LED_SIZE 5
+#define LED_SIZE 3
 #define LDR_SIZE 5
 
-int LED[LED_SIZE];
-int LEDSTATUS[LED_SIZE];
+int LED[(LED_SIZE - 1)];
+int LEDSTATUS[(LED_SIZE - 1)];
 int LDR[LDR_SIZE]; // We still have to discuss where to connect these...
 int LDR_VALUES[LDR_SIZE];
 
 int PopulateArray() {
+  int y = 2;
   for (int i = 0; i <= LED_SIZE; i++) {
-    LED[i] = i;
+    LED[i] = y;
+    y++;
   }
   Serial.println("ARRAY POPULATED");
 }
@@ -31,7 +33,7 @@ void Allocate() {
   int LED_COUNT = 0;
   int LDR_COUNT = 0;
 
-  while (LED_COUNT <= LED_SIZE){
+  while (LED_COUNT <= (LED_SIZE - 1)){
     pinMode(LED[LED_COUNT], OUTPUT);
     LED_COUNT++;
   }
@@ -52,7 +54,7 @@ void Allocate() {
 void Light_On() {
   // Lights On (Default)
   int POWER_COUNT = 0;
-    while (POWER_COUNT <= LED_SIZE){
+    while (POWER_COUNT <= (LED_SIZE - 1)){
       digitalWrite(LED[POWER_COUNT], HIGH);
       POWER_COUNT++;
     }
