@@ -7,7 +7,7 @@
     \|_______|\|__|\|_______|\|__|     \|__|        \|__|\|__| \|__|\|_______\|__|                           \|_______|\|_______|\|_______|\|____________|                                                                                                                                                      
 */                                                                                                                                                 
 
-
+#include <Wire.h>
                                                                                                                                                           
 // Allocate memory for the LED's and Sensors
 #define LED_SIZE 3
@@ -76,25 +76,29 @@ void Start(){
   Serial.println("INITIAL VALUES FETCHED");
 }
 
+int j;
 
-
-
-// Fix these methods later on...
-
-
-/*
-ReceiveArray(){
-
-
+void receiveEvent(int bytes){
+    j = Wire.read();
+  }
   
+void Receive_Array(){
+  Wire.onReceive(receiveEvent);
+  Serial.println(j);
 }
-*/
+
+void Send_Array(){
+  Wire.beginTransmission(8);
+  Wire.write(LDR_SIZE);
+  Wire.endTransmission();
+}
 
 
 
 // Setup and Main Loop
 
 void setup() {
+  Wire.begin(8);
   Serial.begin(9600);
   Allocate();
   Light_On();
@@ -103,12 +107,10 @@ void setup() {
 }
 
 void loop() {
-  /*
-  New_Value();
+  //New_Value();
   Receive_Array();
-  Switch_Light();
-  Algo();
-  Old_Value();
+  //Switch_Light();
+  //Algo();
+  //Old_Value();
   Send_Array();
-  */
 }
