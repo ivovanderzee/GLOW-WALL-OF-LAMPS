@@ -20,9 +20,14 @@ int LDR_VALUES[LDR_SIZE];
 
 int PopulateArray() {
   int y = 2;
+  int x = 2;
   for (int i = 0; i <= LED_SIZE; i++) {
     LED[i] = y;
     y++;
+  }
+  for (int i = 0; i <= LDR_SIZE; i++) {
+    LDR[i] = Ax;
+    x++;
   }
   Serial.println("ARRAY POPULATED");
 }
@@ -93,6 +98,13 @@ void Send_Array(){
   Wire.endTransmission();
 }
 
+void Algo (){
+  
+}
+
+void New_Value (){
+  FetchValues();
+}
 
 
 // Setup and Main Loop
@@ -110,7 +122,7 @@ void loop() {
   //New_Value();
   Receive_Array();
   //Switch_Light();
-  //Algo();
+  Algo();
   //Old_Value();
   Send_Array();
 }
