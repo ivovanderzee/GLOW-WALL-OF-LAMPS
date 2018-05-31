@@ -10,8 +10,9 @@
 #include <Wire.h>
                                                                                                                                                           
 // Allocate memory for the LED's and Sensors
-#define LED_SIZE 3
-#define LDR_SIZE 5
+#define LED_SIZE 1
+#define LDR_SIZE 1
+int AnalogLocation[6] = {A0,A1,A2,A3,A4,A5};
 
 int LED[(LED_SIZE - 1)];
 int LEDSTATUS[(LED_SIZE - 1)];
@@ -20,14 +21,9 @@ int LDR_VALUES[LDR_SIZE];
 
 int PopulateArray() {
   int y = 2;
-  int x = 2;
   for (int i = 0; i <= LED_SIZE; i++) {
     LED[i] = y;
     y++;
-  }
-  for (int i = 0; i <= LDR_SIZE; i++) {
-    LDR[i] = Ax;
-    x++;
   }
   Serial.println("ARRAY POPULATED");
 }
@@ -43,14 +39,10 @@ void Allocate() {
     LED_COUNT++;
   }
 
-/*
-  while (LDR_COUNT <= LDR_SIZE){
+  while (LDR_COUNT <= (LDR_SIZE - 1)){
     pinMode(LDR[LDR_COUNT], INPUT);
     LDR_COUNT++;
-
   }
-
-*/
 
   Serial.println("INPUT/OUTPUT SET");
  
@@ -98,14 +90,6 @@ void Send_Array(){
   Wire.endTransmission();
 }
 
-void Algo (){
-  
-}
-
-void New_Value (){
-  FetchValues();
-}
-
 
 // Setup and Main Loop
 
@@ -120,9 +104,9 @@ void setup() {
 
 void loop() {
   //New_Value();
-  Receive_Array();
+  //Receive_Array();
   //Switch_Light();
-  Algo();
+  //Algo();
   //Old_Value();
-  Send_Array();
+  //Send_Array();
 }
