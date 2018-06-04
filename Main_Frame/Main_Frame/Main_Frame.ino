@@ -19,6 +19,7 @@ int LEDSTATUS[(LED_SIZE - 1)];
 int LDR[LDR_SIZE]; // We still have to discuss where to connect these...
 int LDR_VALUES[LDR_SIZE];
 
+// Populate the array
 int PopulateArray() {
   int y = 2;
   for (int i = 0; i <= LED_SIZE; i++) {
@@ -28,6 +29,7 @@ int PopulateArray() {
   Serial.println("ARRAY POPULATED");
 }
 
+// Define the IN/OUTPUT's
 void Allocate() {
   PopulateArray();
   // Define LED and LDR input/output
@@ -48,6 +50,7 @@ void Allocate() {
  
 }
 
+// Light on by default
 void Light_On() {
   // Lights On (Default)
   int POWER_COUNT = 0;
@@ -57,7 +60,8 @@ void Light_On() {
     }
     Serial.println("LIGHTS ON");
   }
-  
+
+// Light off by default
 void Light_Off() {
   // Lights Off (Default)
   int POWER_COUNT = 0;
@@ -67,6 +71,7 @@ void Light_Off() {
     }
     Serial.println("LIGHTS OFF");
 }
+
 
 void Start(){
   // Retrieve initial LDR values
@@ -91,8 +96,8 @@ void Send_Array(){
 }
 
 
-// Setup and Main Loop
 
+// Setup
 void setup() {
   Wire.begin(8);
   Serial.begin(9600);
@@ -102,6 +107,7 @@ void setup() {
   Start();
 }
 
+// Main loop
 void loop() {
   //New_Value();
   //Receive_Array();
