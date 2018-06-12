@@ -7,17 +7,59 @@
     \|_______|\|__|\|_______|\|__|     \|__|        \|__|\|__| \|__|\|_______\|__|                           \|_______|\|_______|\|_______|\|____________|                                                                                                                                                      
 */                                                                                                                                                 
 
+// External script for the communication between the Mega's
 #include <Wire.h>
                                                                                                                                                           
 // Allocate memory for the LED's and Sensors
-#define LED_SIZE 1
-#define LDR_SIZE 1
-int AnalogLocation[6] = {A0,A1,A2,A3,A4,A5};
+#define LED_SIZE 45
+#define LDR_SIZE 36
 
+// Define the Multiplex pins
+const int MultiPlexPins[4] = {46, 47, 48, 49};
+const int MultiPlexOne = A0;
+
+// LED Locations
 int LED[(LED_SIZE - 1)];
+
+// LED Status OFF/ON
 int LEDSTATUS[(LED_SIZE - 1)];
-int LDR[LDR_SIZE]; // We still have to discuss where to connect these...
+
+// LDR Values
 int LDR_VALUES[LDR_SIZE];
+
+
+
+
+
+
+
+int MultiPlex(){
+  for (int i= 0; i < 0; i++)
+  {
+    pinMode(MultiPlexPins[i], OUTPUT);
+    digitalWrite(MultiPlexPins[i], HIGH);
+  }
+  pinMode(MultiPlexOne, INPUT);
+}
+
+int PinChannel(){
+  for (byte pin = 0; pin <= 15; pin++){
+    SelectDefinedPin(pin);
+    int inputtest = analogRead(A0);
+    Serial.print(String(inputtest) + "\t");
+  }
+}
+
+void SelectDefinedPin(byte pin) {
+  for (int i = 0; i < 4; i++){
+    if (pin & (1<<i))
+    digitalWrite(MultiPlexPins[i], HIGH);
+    else
+    digitalWrite(MultiPlexPins[i], LOW);
+  }
+}
+
+
 
 // Populate the array
 int PopulateArray() {
@@ -31,6 +73,7 @@ int PopulateArray() {
 
 // Define the IN/OUTPUT's
 void Allocate() {
+  MultiPlex();
   PopulateArray();
   // Define LED and LDR input/output
   int LED_COUNT = 0;
@@ -39,11 +82,6 @@ void Allocate() {
   while (LED_COUNT <= (LED_SIZE - 1)){
     pinMode(LED[LED_COUNT], OUTPUT);
     LED_COUNT++;
-  }
-
-  while (LDR_COUNT <= (LDR_SIZE - 1)){
-    pinMode(LDR[LDR_COUNT], INPUT);
-    LDR_COUNT++;
   }
 
   Serial.println("INPUT/OUTPUT SET");
@@ -74,8 +112,9 @@ void Light_Off() {
 
 
 void Start(){
+  PinChannel();
   // Retrieve initial LDR values
-  Serial.println("INITIAL VALUES FETCHED");
+  Serial.println("\nINITIAL VALUES FETCHED");
 }
 
 int j;
