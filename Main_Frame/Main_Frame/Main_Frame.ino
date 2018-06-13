@@ -7,63 +7,17 @@
     \|_______|\|__|\|_______|\|__|     \|__|        \|__|\|__| \|__|\|_______\|__|                           \|_______|\|_______|\|_______|\|____________|                                                                                                                                                      
 */                                                                                                                                                 
 
-// External script for the communication between the Mega's
-#include <Wire.h>
-                                                                                                                                                          
-// Allocate memory for the LED's and Sensors
-#define LED_SIZE 45
-#define LDR_SIZE 36
+                                                                                                                                               
+// Allocate memory for the LED's and Sensors`
+#define LED_SIZE 7
+#define LDR_SIZE 7
 
-// Define the Multiplex pins
-const int MultiPlexPins[4] = {46, 47, 48, 49};
-const int MultiPlexOne = A0;
-
-// LED Locations
-int LED[(LED_SIZE - 1)];
-
-// LED Status OFF/ON
-int LEDSTATUS[(LED_SIZE - 1)];
-
-// LDR Values
+int LED[(LED_SIZE-1)];
+int LDR[LDR_SIZE]; 
 int LDR_VALUES[LDR_SIZE];
 
-
-
-
-
-
-
-int MultiPlex(){
-  for (int i= 0; i < 0; i++)
-  {
-    pinMode(MultiPlexPins[i], OUTPUT);
-    digitalWrite(MultiPlexPins[i], HIGH);
-  }
-  pinMode(MultiPlexOne, INPUT);
-}
-
-int PinChannel(){
-  for (byte pin = 0; pin <= 15; pin++){
-    SelectDefinedPin(pin);
-    int inputtest = analogRead(A0);
-    Serial.print(String(inputtest) + "\t");
-  }
-}
-
-void SelectDefinedPin(byte pin) {
-  for (int i = 0; i < 4; i++){
-    if (pin & (1<<i))
-    digitalWrite(MultiPlexPins[i], HIGH);
-    else
-    digitalWrite(MultiPlexPins[i], LOW);
-  }
-}
-
-
-
-// Populate the array
 int PopulateArray() {
-  int y = 2;
+  int y = 1;
   for (int i = 0; i <= LED_SIZE; i++) {
     LED[i] = y;
     y++;
@@ -71,35 +25,36 @@ int PopulateArray() {
   Serial.println("ARRAY POPULATED");
 }
 
-// Define the IN/OUTPUT's
 void Allocate() {
-  MultiPlex();
   PopulateArray();
   // Define LED and LDR input/output
   int LED_COUNT = 0;
-  int LDR_COUNT = 0;
+  //int LDR_COUNT = 0;
 
-  while (LED_COUNT <= (LED_SIZE - 1)){
+  while (LED_COUNT <= LED_SIZE){
     pinMode(LED[LED_COUNT], OUTPUT);
     LED_COUNT++;
   }
 
+  /*
+  while (LDR_COUNT <= LDR_SIZE){
+    pinMode(LDR[LDR_COUNT], INPUT);
+    LDR_COUNT++;
+  }
+  */
   Serial.println("INPUT/OUTPUT SET");
- 
 }
 
-// Light on by default
 void Light_On() {
   // Lights On (Default)
   int POWER_COUNT = 0;
-    while (POWER_COUNT <= (LED_SIZE - 1)){
+    while (POWER_COUNT <= LED_SIZE){
       digitalWrite(LED[POWER_COUNT], HIGH);
       POWER_COUNT++;
     }
     Serial.println("LIGHTS ON");
   }
-
-// Light off by default
+  
 void Light_Off() {
   // Lights Off (Default)
   int POWER_COUNT = 0;
@@ -110,35 +65,32 @@ void Light_Off() {
     Serial.println("LIGHTS OFF");
 }
 
-
 void Start(){
-  PinChannel();
   // Retrieve initial LDR values
-  Serial.println("\nINITIAL VALUES FETCHED");
+  Serial.println("INITIAL VALUES FETCHED");
 }
 
-int j;
 
-void receiveEvent(int bytes){
-    j = Wire.read();
-  }
+
+
+// Fix these methods later on...
+/*
+SendArray(){
+  Wire.beginTransmission(8); // transmit to device #8
+  Wire.write(a);              // sends one byte
+  Wire.endTransmission();    // stop transmitting
+}
+
+ReceiveArray(){
   
-void Receive_Array(){
-  Wire.onReceive(receiveEvent);
-  Serial.println(j);
 }
-
-void Send_Array(){
-  Wire.beginTransmission(8);
-  Wire.write(LDR_SIZE);
-  Wire.endTransmission();
-}
+*/
 
 
 
-// Setup
+// Setup and Main Loop
+
 void setup() {
-  Wire.begin(8);
   Serial.begin(9600);
   Allocate();
   Light_On();
@@ -146,12 +98,13 @@ void setup() {
   Start();
 }
 
-// Main loop
 void loop() {
-  //New_Value();
-  //Receive_Array();
-  //Switch_Light();
-  //Algo();
-  //Old_Value();
-  //Send_Array();
+  /*
+  New_Value();
+  Receive_Array();
+  Switch_Light();
+  Algo();
+  Old_Value();
+  Send_Array();
+  */
 }
