@@ -34,17 +34,14 @@ int LDRVALUES_OLD[LDR_SIZE];
 int LDRVALUES_NEW[LDR_SIZE];
 
 
-
-
-
 int GetValues(){
   for (byte pin = 0; pin <= 15; pin++){
     SelectDefinedPin(pin);
     int inputtest = analogRead(A0);
     
-    int inputtest_two = analogRead(A5);
+    //int inputtest_two = analogRead(A5);
     Serial.print(String(inputtest) + "\t");
-    Serial.print(String(inputtest_two) + "\t");
+    //Serial.print(String(inputtest_two) + "\t");
   }
 }
 
@@ -83,12 +80,12 @@ void Allocate() {
   int LED_COUNT = 0;
   int LDR_COUNT = 0;
 
-  while (LED_COUNT <= (LED_SIZE - 1)){
+  while (LED_COUNT < (LED_SIZE)){
     pinMode(LEDLOCATION[LED_COUNT], OUTPUT);
     LED_COUNT++;
   }
 
-  while (LDR_COUNT <= 4){
+  while (LDR_COUNT < 4){
     pinMode(LDRLOCATION[LDR_COUNT], INPUT);
     LDR_COUNT++;
   }
@@ -101,7 +98,7 @@ void Allocate() {
 void Light_On() {
   // Lights On (Default)
   int POWER_COUNT = 0;
-    while (POWER_COUNT <= (LED_SIZE - 1)){
+    while (POWER_COUNT < (LED_SIZE)){
       digitalWrite(LEDLOCATION[POWER_COUNT], HIGH);
       POWER_COUNT++;
     }
@@ -147,6 +144,15 @@ void setup() {
   // Light_Off();
   GetValues();
   Serial.println("\nINITIAL VALUES FETCHED");
+  
+  
+  int x = 0;
+  while (x < 25){
+    Serial.print(LDRVALUES_NEW[x]) ;
+    Serial.print("\t");
+    x++;
+  }
+
 }
 
 // Main loop
@@ -159,5 +165,4 @@ void loop() {
   //Old_Value();
   // getValues( newArray);
   //Send_Array();
-}
 }
