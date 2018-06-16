@@ -28,24 +28,36 @@ int LEDLOCATION[LED_SIZE]{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 22, 23, 24, 25
 
 // LED Status OFF/ON
 int LEDSTATUS[(LED_SIZE)];
+int RECEIVEDSTATUS[(LED_SIZE)];
 
 // LDR Values
 int LDRVALUES_OLD[LDR_SIZE];
 int LDRVALUES_NEW[LDR_SIZE];
 
 
+int Compare(){
+  int value_old = 0;
+  int value_new = 0;
+  int difference = 0;
+  int percentage = 0;
+
+  for(int i = 0; i < 16; i++){
+    value_old = LDRVALUES_OLD[16];
+    value_new = LDRVALUES_NEW[16];
+    difference = (value_old - value_new);
+    percentage = (difference / value_new) * 100;
+    Serial.print(difference);
+    Serial.print("\n");
+  }
+  if(((difference / value_new) * 100) > 15){
+    Serial.print("YOLO");
+  }
+}
+
 int Old_Value(){
   for (int i = 0; i < 36; i++){
     LDRVALUES_OLD[i] = LDRVALUES_NEW[i];
   }
-  int x = 0;
-  while (x < 36){
-    Serial.print(LDRVALUES_OLD[x]) ;
-    Serial.print("\t");
-    x++;
-  }
-  x = 0;
-  Serial.print("\n");
 }
 
 int GetValues(){
@@ -125,6 +137,7 @@ void Light_On() {
   int POWER_COUNT = 0;
     while (POWER_COUNT < (LED_SIZE)){
       digitalWrite(LEDLOCATION[POWER_COUNT], HIGH);
+      LEDSTATUS[POWER_COUNT] = 1;
       POWER_COUNT++;
     }
     Serial.println("LIGHTS ON");
@@ -141,20 +154,24 @@ void Light_Off() {
     Serial.println("LIGHTS OFF");
 }
 
-int j;
 
 void receiveEvent(int bytes){
-    j = Wire.read();
+  // TODO: add begin and end points.
+    RECEIVEDSTATUS[0] = Wire.read();
   }
   
 void Receive_Array(){
   Wire.onReceive(receiveEvent);
-  Serial.println(j);
+  //Serial.println(j);
 }
 
 void Send_Array(){
   Wire.beginTransmission(8);
-  Wire.write(LDR_SIZE);
+  Wire.write("Begin");
+  for (int i = 0; i < 35; i++){
+    Wire.write(LEDSTATUS[i]);
+  }
+  Wire.write("End");
   Wire.endTransmission();
 }
 
@@ -165,8 +182,8 @@ void setup() {
   Wire.begin(8);
   Serial.begin(9600);
   Allocate();
-  //Light_On();
-  Light_Off();
+  Light_On();
+  //Light_Off();
   GetValues();
   Serial.println("INITIAL VALUES FETCHED");
 }
@@ -176,9 +193,21 @@ void loop() {
   GetValues();
   //Receive_Array();
   //Switch_Light();
-  //Algo();
+  //Compare();
   Old_Value();
   //Send_Array();
   
   delay(500);
 }
+
+
+/*
+ int x = 0;
+  while (x < 36){
+    //Serial.print(LEDSTATUS[x]) ;
+    //Serial.print("\t");
+    x++;
+  }
+  x = 0;
+  Serial.print("\n");
+ */
