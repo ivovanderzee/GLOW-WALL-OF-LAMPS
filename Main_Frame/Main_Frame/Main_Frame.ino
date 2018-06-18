@@ -79,6 +79,15 @@ int GetValues(){
   LDRVALUES_NEW[17] = analogRead(A2);
   LDRVALUES_NEW[18] = analogRead(A3);
   LDRVALUES_NEW[19] = analogRead(A4);
+
+  int x = 0;
+  while (x < 36){
+    Serial.print(LDRVALUES_NEW[x]) ;
+    Serial.print("\t");
+    x++;
+  }
+  x = 0;
+  Serial.print("\n");
 }
 
 
@@ -194,7 +203,7 @@ void loop() {
   //Receive_Array();
   //Switch_Light();
   //Compare();
-  Old_Value();
+  //Old_Value();
   //Send_Array();
   
   delay(500);
