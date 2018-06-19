@@ -13,6 +13,7 @@
 // Allocate memory for the LED's and Sensors
 #define LED_SIZE 36
 #define LDR_SIZE 36
+#define SENSITIVITY 8
 
 // Define the Multiplex pins
 const int MultiPlexPins_One[4] = {46, 47, 48, 49};
@@ -36,21 +37,12 @@ int LDRVALUES_NEW[LDR_SIZE];
 
 
 int Compare(){
-  int value_old = 0;
-  int value_new = 0;
-  int difference = 0;
-  int percentage = 0;
-
-  for(int i = 0; i < 16; i++){
-    value_old = LDRVALUES_OLD[16];
-    value_new = LDRVALUES_NEW[16];
-    difference = (value_old - value_new);
-    percentage = (difference / value_new) * 100;
-    Serial.print(difference);
-    Serial.print("\n");
-  }
-  if(((difference / value_new) * 100) > 15){
-    Serial.print("YOLO");
+  for(int i = 0; i < 36; i++){
+    float difference = LDRVALUES_OLD[i] - LDRVALUES_NEW[i];
+    float percentage = (difference / LDRVALUES_OLD[i] * 100);
+    if(percentage > SENSITIVITY){
+      digitalWrite(LEDLOCATION[i], LOW);
+    }
   }
 }
 
@@ -79,15 +71,6 @@ int GetValues(){
   LDRVALUES_NEW[17] = analogRead(A2);
   LDRVALUES_NEW[18] = analogRead(A3);
   LDRVALUES_NEW[19] = analogRead(A4);
-
-  int x = 0;
-  while (x < 36){
-    Serial.print(LDRVALUES_NEW[x]) ;
-    Serial.print("\t");
-    x++;
-  }
-  x = 0;
-  Serial.print("\n");
 }
 
 
@@ -190,6 +173,14 @@ void Send_Array(){
 void setup() {
   Wire.begin(8);
   Serial.begin(9600);
+  for (int i=0; i<4; i++)
+  {
+    pinMode(MultiPlexPins_One[i], OUTPUT);
+    pinMode(MultiPlexPins_Two[i], OUTPUT);
+    digitalWrite(MultiPlexPins_One[i], HIGH);
+    digitalWrite(MultiPlexPins_Two[i], HIGH);
+  }
+  
   Allocate();
   Light_On();
   //Light_Off();
@@ -202,11 +193,11 @@ void loop() {
   GetValues();
   //Receive_Array();
   //Switch_Light();
-  //Compare();
-  //Old_Value();
+  Compare();
+  Old_Value();
   //Send_Array();
-  
-  delay(500);
+  delay(200);
+
 }
 
 
@@ -218,5 +209,9 @@ void loop() {
     x++;
   }
   x = 0;
+  Serial.print("\n");
+
+
+  Serial.print(LDRVALUES_NEW[4]);
   Serial.print("\n");
  */
