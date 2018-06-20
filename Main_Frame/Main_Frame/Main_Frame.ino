@@ -12,8 +12,8 @@
                                                                                                                                                           
 // Allocate memory for the LED's and Sensors
 #define LED_SIZE 36
-#define LDR_SIZE 36
-#define SENSITIVITY 8
+#define LDR_SIZE 36   
+#define SENSITIVITY 16
 
 // Define the Multiplex pins
 const int MultiPlexPins_One[4] = {46, 47, 48, 49};
@@ -40,8 +40,14 @@ int Compare(){
   for(int i = 0; i < 36; i++){
     float difference = LDRVALUES_OLD[i] - LDRVALUES_NEW[i];
     float percentage = (difference / LDRVALUES_OLD[i] * 100);
-    if(percentage > SENSITIVITY){
+    if(percentage > SENSITIVITY && LEDSTATUS[i] == 1){
       digitalWrite(LEDLOCATION[i], LOW);
+      LEDSTATUS[i] = 0;
+      delay(300);
+    } else if(percentage > SENSITIVITY && LEDSTATUS[i] == 0){
+      digitalWrite(LEDLOCATION[i], HIGH);
+      LEDSTATUS[i] = 1;
+      delay(300);
     }
   }
 }
@@ -146,25 +152,13 @@ void Light_Off() {
     Serial.println("LIGHTS OFF");
 }
 
-
-void receiveEvent(int bytes){
-  // TODO: add begin and end points.
-    RECEIVEDSTATUS[0] = Wire.read();
-  }
-  
-void Receive_Array(){
-  Wire.onReceive(receiveEvent);
-  //Serial.println(j);
-}
-
 void Send_Array(){
-  Wire.beginTransmission(8);
-  Wire.write("Begin");
-  for (int i = 0; i < 35; i++){
-    Wire.write(LEDSTATUS[i]);
+  for(int i = 0; i < LED_SIZE; i++){
+    Wire.beginTransmission(8);
+    byte myArray[2] = {i, LEDSTATUS[i]};
+    Wire.write(myArray, 2);
+    Wire.endTransmission();
   }
-  Wire.write("End");
-  Wire.endTransmission();
 }
 
 
@@ -182,8 +176,8 @@ void setup() {
   }
   
   Allocate();
-  Light_On();
-  //Light_Off();
+  //Light_On();
+  Light_Off();
   GetValues();
   Serial.println("INITIAL VALUES FETCHED");
 }
@@ -195,12 +189,13 @@ void loop() {
   //Switch_Light();
   Compare();
   Old_Value();
-  //Send_Array();
-  delay(200);
+  Send_Array();
+  //Serial.print(LDRVALUES_NEW[29]);
+  //Serial.print("\n");
+  delay(110);
+  Serial.println(LDRVALUES_NEW[0]);
 
 }
-
-
 /*
  int x = 0;
   while (x < 36){
