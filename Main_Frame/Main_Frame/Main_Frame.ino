@@ -205,8 +205,6 @@ void loop() {
   }
   x = 0;
   Serial.print("\n");
-
-
   Serial.print(LDRVALUES_NEW[4]);
   Serial.print("\n");
  */
